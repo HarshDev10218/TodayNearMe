@@ -1,0 +1,3 @@
+"""
+TodayNearMe Backend Application Package.
+"""
