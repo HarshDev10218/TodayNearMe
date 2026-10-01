@@ -1,0 +1,318 @@
+/**
+ * Nearby public places mock data for Hyderabad
+ * Categorized into hospitals, pharmacies, parks, government facilities, and public utilities.
+ */
+export const NEARBY_CATEGORIES = [
+  { id: 'all', label: 'All Places' },
+  { id: 'hospitals', label: 'Hospitals' },
+  { id: 'pharmacies', label: 'Pharmacies' },
+  { id: 'parks', label: 'Parks & Open Spaces' },
+  { id: 'government', label: 'Government & Civic' },
+  { id: 'public', label: 'Public Utilities' }
+];
+
+export const nearbyPlacesData = [
+  // Hospitals
+  {
+    id: 'hosp-1',
+    name: 'Nizam\'s Institute of Medical Sciences (NIMS)',
+    category: 'hospitals',
+    categoryLabel: 'Hospital',
+    locality: 'Ameerpet & Punjagutta',
+    address: 'Punjagutta Main Road, Hyderabad',
+    distanceKm: '1.2 km',
+    timing: 'Emergency & Trauma: 24/7 (OPD 8 AM - 2 PM)',
+    phone: '040-23489000',
+    type: 'Government Super-Speciality Hospital',
+    isEmergencyAvailable: true,
+    highlight: 'Govt. tertiary care & Level 1 emergency'
+  },
+  {
+    id: 'hosp-2',
+    name: 'Osmania General Hospital',
+    category: 'hospitals',
+    categoryLabel: 'Hospital',
+    locality: 'Charminar & Old City',
+    address: 'Afzal Gunj, High Court Road, Hyderabad',
+    distanceKm: '3.4 km',
+    timing: 'Emergency & Casualty: 24/7',
+    phone: '040-24600121',
+    type: 'Public Teaching Hospital',
+    isEmergencyAvailable: true,
+    highlight: 'Full emergency casualty & blood bank'
+  },
+  {
+    id: 'hosp-3',
+    name: 'Apollo Hospitals',
+    category: 'hospitals',
+    categoryLabel: 'Hospital',
+    locality: 'Banjara Hills & Jubilee Hills',
+    address: 'Road No. 72, Film Nagar, Jubilee Hills',
+    distanceKm: '4.1 km',
+    timing: 'Emergency 24/7',
+    phone: '040-23607777',
+    type: 'Multi-Speciality Hospital',
+    isEmergencyAvailable: true,
+    highlight: '24/7 Cardiac & emergency response'
+  },
+  {
+    id: 'hosp-4',
+    name: 'Gandhi Hospital',
+    category: 'hospitals',
+    categoryLabel: 'Hospital',
+    locality: 'Secunderabad & Begumpet',
+    address: 'Musheerabad, Secunderabad',
+    distanceKm: '5.2 km',
+    timing: 'Emergency 24/7',
+    phone: '040-27505566',
+    type: 'Public General Hospital',
+    isEmergencyAvailable: true,
+    highlight: 'Major government trauma care'
+  },
+  {
+    id: 'hosp-5',
+    name: 'Continental Hospitals',
+    category: 'hospitals',
+    categoryLabel: 'Hospital',
+    locality: 'Gachibowli & Madhapur (IT Corridor)',
+    address: 'Financial District, Nanakramguda, Gachibowli',
+    distanceKm: '8.5 km',
+    timing: 'Emergency 24/7',
+    phone: '040-67000000',
+    type: 'Multi-Speciality Hospital',
+    isEmergencyAvailable: true,
+    highlight: 'Financial district trauma unit'
+  },
+
+  // Pharmacies
+  {
+    id: 'pharm-1',
+    name: 'Apollo Pharmacy 24/7',
+    category: 'pharmacies',
+    categoryLabel: 'Pharmacy',
+    locality: 'Banjara Hills & Jubilee Hills',
+    address: 'Road No. 12, Opposite MLA Colony, Banjara Hills',
+    distanceKm: '0.9 km',
+    timing: 'Open 24 Hours',
+    phone: '040-23301234',
+    type: '24/7 Medical Store',
+    isEmergencyAvailable: true,
+    highlight: 'Prescription medicines & surgicals in stock'
+  },
+  {
+    id: 'pharm-2',
+    name: 'MedPlus 24/7 Pharmacy',
+    category: 'pharmacies',
+    categoryLabel: 'Pharmacy',
+    locality: 'Ameerpet & Punjagutta',
+    address: 'Near Dwaraka Hotel, Punjagutta Circle',
+    distanceKm: '1.4 km',
+    timing: 'Open 24 Hours',
+    phone: '040-67006700',
+    type: '24/7 Medical Store',
+    isEmergencyAvailable: true,
+    highlight: 'All night emergency counter'
+  },
+  {
+    id: 'pharm-3',
+    name: 'Apollo Pharmacy — Koti Central',
+    category: 'pharmacies',
+    categoryLabel: 'Pharmacy',
+    locality: 'Charminar & Old City',
+    address: 'Opposite Osmania Medical College, Koti',
+    distanceKm: '3.6 km',
+    timing: 'Open 24 Hours',
+    phone: '040-24750100',
+    type: 'Wholesale & Retail Pharmacy',
+    isEmergencyAvailable: true,
+    highlight: 'Cold-chain vaccines available'
+  },
+  {
+    id: 'pharm-4',
+    name: 'MedPlus Pharmacy & Wellness',
+    category: 'pharmacies',
+    categoryLabel: 'Pharmacy',
+    locality: 'Gachibowli & Madhapur (IT Corridor)',
+    address: 'Hitec City Main Road, Cyber Towers Junction',
+    distanceKm: '6.2 km',
+    timing: 'Open 24 Hours',
+    phone: '040-67006700',
+    type: '24/7 Medical Store',
+    isEmergencyAvailable: true,
+    highlight: 'Emergency supplies & baby care'
+  },
+
+  // Parks
+  {
+    id: 'park-1',
+    name: 'KBR (Kasu Brahmananda Reddy) National Park',
+    category: 'parks',
+    categoryLabel: 'Park & Nature Reserve',
+    locality: 'Banjara Hills & Jubilee Hills',
+    address: 'Road No. 2, Banjara Hills, Jubilee Hills Check Post',
+    distanceKm: '2.5 km',
+    timing: 'Morning: 5:30 AM – 10:00 AM | Evening: 4:30 PM – 7:00 PM',
+    phone: '040-23556070',
+    type: 'Protected National Park',
+    isEmergencyAvailable: false,
+    highlight: '5.2 km jogging track & nature trail'
+  },
+  {
+    id: 'park-2',
+    name: 'Sanjeevaiah Park & National Flag',
+    category: 'parks',
+    categoryLabel: 'Park & Lakefront',
+    locality: 'Secunderabad & Begumpet',
+    address: 'Hussain Sagar Lake Promenade, Necklace Road',
+    distanceKm: '3.1 km',
+    timing: 'Daily: 9:00 AM – 7:00 PM',
+    phone: '040-27541234',
+    type: 'Urban Public Park',
+    isEmergencyAvailable: false,
+    highlight: 'Lakefront walking path & rose garden'
+  },
+  {
+    id: 'park-3',
+    name: 'Public Gardens (Bagh-e-Aam)',
+    category: 'parks',
+    categoryLabel: 'Historical Public Garden',
+    locality: 'Charminar & Old City',
+    address: 'Near Nampally Railway Station, Saifabad',
+    distanceKm: '2.8 km',
+    timing: 'Daily: 9:00 AM – 8:00 PM',
+    phone: '040-23234567',
+    type: 'Heritage Public Park',
+    isEmergencyAvailable: false,
+    highlight: 'Historic gardens, museum & assembly view'
+  },
+  {
+    id: 'park-4',
+    name: 'Durgam Cheruvu Lakefront Promenade',
+    category: 'parks',
+    categoryLabel: 'Lakefront Park',
+    locality: 'Gachibowli & Madhapur (IT Corridor)',
+    address: 'Kavuri Hills, Near Cable Bridge, Madhapur',
+    distanceKm: '6.8 km',
+    timing: 'Daily: 5:30 AM – 9:00 PM',
+    phone: '040-23110000',
+    type: 'Lakefront Walk & Recreation',
+    isEmergencyAvailable: false,
+    highlight: 'Walking deck, cycling trail & open amphitheater'
+  },
+
+  // Government Facilities
+  {
+    id: 'govt-1',
+    name: 'MeeSeva Citizen Services Centre',
+    category: 'government',
+    categoryLabel: 'Citizen Services',
+    locality: 'Banjara Hills & Jubilee Hills',
+    address: 'Road No. 10, Banjara Hills (Near Post Office)',
+    distanceKm: '1.1 km',
+    timing: 'Monday – Saturday: 10:00 AM – 5:00 PM',
+    phone: '040-23351234',
+    type: 'Telangana State Citizen Portal',
+    isEmergencyAvailable: false,
+    highlight: 'Aadhaar, utility bills, revenue & caste certificates'
+  },
+  {
+    id: 'govt-2',
+    name: 'GHMC Head Office (Greater Hyderabad Municipal Corp)',
+    category: 'government',
+    categoryLabel: 'Civic Headquarters',
+    locality: 'Secunderabad & Begumpet',
+    address: 'CC Complex, Tank Bund Road, Near Ambedkar Statue',
+    distanceKm: '2.9 km',
+    timing: 'Mon – Fri: 10:30 AM – 5:00 PM',
+    phone: '040-21111111',
+    type: 'Municipal Corporation HQ',
+    isEmergencyAvailable: false,
+    highlight: 'Property tax, trade license & civic grievance cell'
+  },
+  {
+    id: 'govt-3',
+    name: 'Hyderabad District Collectorate',
+    category: 'government',
+    categoryLabel: 'District Administration',
+    locality: 'Charminar & Old City',
+    address: 'Chirag Ali Lane, Abids, Hyderabad',
+    distanceKm: '3.2 km',
+    timing: 'Mon – Sat: 10:30 AM – 5:00 PM',
+    phone: '040-23202833',
+    type: 'District Revenue & Executive Office',
+    isEmergencyAvailable: false,
+    highlight: 'District administrative grievances & election office'
+  },
+  {
+    id: 'govt-4',
+    name: 'Regional Transport Office (RTO) — Kondapur',
+    category: 'government',
+    categoryLabel: 'Transport Department',
+    locality: 'Gachibowli & Madhapur (IT Corridor)',
+    address: 'RTO Office Road, Raghavendra Colony, Kondapur',
+    distanceKm: '7.8 km',
+    timing: 'Mon – Sat: 10:00 AM – 4:00 PM',
+    phone: '040-23114455',
+    type: 'Transport Office',
+    isEmergencyAvailable: false,
+    highlight: 'Vehicle registration & driving licenses'
+  },
+
+  // Public Utilities
+  {
+    id: 'pub-1',
+    name: 'State Central Library (Afzalgunj)',
+    category: 'public',
+    categoryLabel: 'Public Library',
+    locality: 'Charminar & Old City',
+    address: 'Musi River Bank, Afzal Gunj, Hyderabad',
+    distanceKm: '3.8 km',
+    timing: '8:00 AM – 8:00 PM (Closed Thursdays & Public Holidays)',
+    phone: '040-24602888',
+    type: 'Public Heritage Library',
+    isEmergencyAvailable: false,
+    highlight: 'Over 500,000 public reference volumes & reading rooms'
+  },
+  {
+    id: 'pub-2',
+    name: 'Ameerpet Metro Interchange Station',
+    category: 'public',
+    categoryLabel: 'Public Transit Hub',
+    locality: 'Ameerpet & Punjagutta',
+    address: 'Ameerpet X Roads, Hyderabad',
+    distanceKm: '1.6 km',
+    timing: 'First Train: 6:00 AM | Last Train: 11:00 PM',
+    phone: '040-23332555',
+    type: 'Red & Blue Line Metro Interchange',
+    isEmergencyAvailable: false,
+    highlight: 'Step-free access, smart card recharge & feeder buses'
+  },
+  {
+    id: 'pub-3',
+    name: 'Mahatma Gandhi Bus Station (MGBS / Imlibun)',
+    category: 'public',
+    categoryLabel: 'Interstate Transit Terminal',
+    locality: 'Charminar & Old City',
+    address: 'Gowliguda South, Musi River, Hyderabad',
+    distanceKm: '4.2 km',
+    timing: 'Operating 24 Hours',
+    phone: '040-24614406',
+    type: 'Central Bus Terminal & Metro Hub',
+    isEmergencyAvailable: true,
+    highlight: 'Direct city, district & airport pushpak connections'
+  },
+  {
+    id: 'pub-4',
+    name: 'General Post Office (GPO) — Abids',
+    category: 'public',
+    categoryLabel: 'Postal Services',
+    locality: 'Charminar & Old City',
+    address: 'JN Road, Abids, Hyderabad',
+    distanceKm: '2.7 km',
+    timing: 'Mon – Sat: 9:00 AM – 7:00 PM | Speed Post: 24/7',
+    phone: '040-24744422',
+    type: 'Central Postal & Speed Post Facility',
+    isEmergencyAvailable: false,
+    highlight: '24/7 round-the-clock speed post counter'
+  }
+];
