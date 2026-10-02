@@ -35,10 +35,13 @@ class Settings(BaseSettings):
     WEATHER_ALERT_API_KEY: str = ""
     WEATHER_ALERT_API_URL: str = "https://api.weatherapi.com/v1"
 
-    # Places service settings
+    # Places service settings (Overpass API resilience)
     PLACES_PROVIDER: str = "openstreetmap"
     PLACES_CACHE_TTL_SECONDS: int = 900  # 15 minutes cache
     PLACES_SEARCH_RADIUS_KM: float = 4.0  # ~4 km urban radius
+    PLACES_OVERPASS_TIMEOUT_SECONDS: int = 25  # Increased from 12s for Render network latency
+    PLACES_OVERPASS_RETRY_COUNT: int = 2  # Retry each endpoint 2 times before fallback
+    PLACES_FALLBACK_TO_EMPTY: bool = True  # Return empty valid JSON instead of 502
 
     # Events service settings
     EVENTS_PROVIDER: str = "fossunited"
@@ -47,6 +50,10 @@ class Settings(BaseSettings):
 
     # Civic updates service settings
     CIVIC_UPDATES_CACHE_TTL_SECONDS: int = 1800  # 30 minutes cache
+
+    # HTTP client pooling for production
+    HTTP_CLIENT_POOL_SIZE: int = 20  # Reuse connections; reduce startup overhead
+    HTTP_CLIENT_TIMEOUT_SECONDS: int = 30  # Global timeout for httpx
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
