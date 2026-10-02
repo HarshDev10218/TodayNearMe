@@ -1,18 +1,21 @@
+import logging
 import math
 import time
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple
+
 import httpx
 from fastapi import HTTPException
 
 from app.core.config import settings
 from app.models.place import (
     CATEGORY_LABELS,
-    CategoryType,
     PlaceItem,
     PlaceLocation,
     PlacesResponse,
 )
+
+logger = logging.getLogger(__name__)
 
 # Overpass QL clause templates per category
 # Using spatial bounding box filtering for high-performance index queries
@@ -40,7 +43,6 @@ CATEGORY_RADII_METERS: Dict[str, float] = {
     "transport": 3500.0,
     "petrol_station": 3000.0,
 }
-
 
 
 def calculate_haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> int:
@@ -152,7 +154,7 @@ class OpenStreetMapPlacesProvider(BasePlacesProvider):
         bbox = get_bounding_box(latitude, longitude, radius_m)
         category_clause = query_tmpl.format(bbox=bbox)
 
-        # Build clean Overpass QL query with server-side limit of 15 to protect bandwidth
+        # Build clean Overpass QL query with server-side limit of 15 to protect bandwidth.
         overpass_query = f"[out:json][timeout:12];\n{category_clause}\nout center tags 15;"
 
         headers = {
@@ -160,10 +162,9 @@ class OpenStreetMapPlacesProvider(BasePlacesProvider):
             "Accept": "application/json",
         }
 
-        raw_elements = None
-        last_error = None
+        last_error: Optional[str] = None
+        raw_elements: Optional[List[dict]] = None
 
-        # Try endpoints with quick fallback (12s timeout each)
         for endpoint in self.OVERPASS_ENDPOINTS:
             try:
                 async with httpx.AsyncClient(timeout=12.0) as client:
@@ -176,31 +177,21 @@ class OpenStreetMapPlacesProvider(BasePlacesProvider):
                         data = resp.json()
                         raw_elements = data.get("elements", [])
                         break
-                    else:
-                        last_error = f"Upstream endpoint {endpoint} returned status {resp.status_code}"
-                        continue
+                    last_error = f"Upstream endpoint {endpoint} returned status {resp.status_code}"
             except httpx.TimeoutException:
                 last_error = f"Timeout connecting to {endpoint}"
-                continue
-            except Exception as e:
-                last_error = str(e)
-                continue
-
-
+            except Exception as exc:  # pragma: no cover - upstream provider failure should be handled gracefully
+                last_error = f"Failed connecting to {endpoint}: {exc}"
 
         if raw_elements is None:
-            # If all mirrors timed out or failed, raise clean HTTP 504/502
-            if "Timeout" in str(last_error):
-                raise HTTPException(
-                    status_code=504,
-                    detail="Nearby places service timed out. Please try again in a few moments.",
-                )
-
-
-            raise HTTPException(
-                status_code=502,
-                detail="Unable to retrieve nearby places from upstream data provider right now.",
+            logger.warning(
+                "Overpass provider failed for category=%s lat=%s lon=%s. last_error=%s",
+                category,
+                latitude,
+                longitude,
+                last_error,
             )
+            return []
 
         places: List[PlaceItem] = []
         category_label = CATEGORY_LABELS.get(category, category.title())
@@ -227,19 +218,15 @@ class OpenStreetMapPlacesProvider(BasePlacesProvider):
                     brand = tags.get("brand") or tags.get("operator")
                     name = f"{brand} Petrol Station" if brand else "Petrol Station"
                 else:
-                    # Skip completely anonymous unnamed records
                     continue
 
             name = name.strip()
             if not name:
                 continue
 
-            # Calculate geographic distance
             distance_m = calculate_haversine_distance(
                 latitude, longitude, float(place_lat), float(place_lon)
             )
-
-            # Extract address if present in OSM data
             address = extract_address(tags)
 
             places.append(
@@ -257,10 +244,7 @@ class OpenStreetMapPlacesProvider(BasePlacesProvider):
                 )
             )
 
-        # Sort places by distance ascending
         places.sort(key=lambda p: p.distance_m)
-
-        # Return closest 10 places
         return places[:10]
 
 
@@ -271,7 +255,6 @@ class PlacesService:
 
     def __init__(self, provider: Optional[BasePlacesProvider] = None):
         self._provider = provider or OpenStreetMapPlacesProvider()
-        # In-memory cache: key -> (timestamp, PlacesResponse)
         self._cache: Dict[str, Tuple[float, PlacesResponse]] = {}
 
     def _get_cache_key(self, latitude: float, longitude: float, category: str) -> str:
@@ -287,8 +270,7 @@ class PlacesService:
             timestamp, cached_res = self._cache[key]
             if time.time() - timestamp < settings.PLACES_CACHE_TTL_SECONDS:
                 return cached_res.model_copy(update={"cached": True})
-            else:
-                del self._cache[key]
+            del self._cache[key]
         return None
 
     def _save_to_cache(self, key: str, response: PlacesResponse) -> None:
@@ -308,7 +290,6 @@ class PlacesService:
         if cached is not None:
             return cached
 
-        # Fetch live places from provider
         places = await self._provider.fetch_places(latitude, longitude, norm_cat)
 
         is_hyderabad_default = (
