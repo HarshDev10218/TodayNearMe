@@ -1,9 +1,12 @@
+import logging
 from typing import Optional
 from fastapi import APIRouter, Query, HTTPException, status
 
 from app.core.config import settings
-from app.models.place import CATEGORY_LABELS, PlacesResponse
+from app.models.place import CATEGORY_LABELS, PlacesResponse, PlaceLocation
 from app.services.places_service import places_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["Nearby Places"])
 
@@ -60,4 +63,26 @@ async def get_nearby_places(
     target_lat = latitude if latitude is not None else settings.DEFAULT_HYDERABAD_LAT
     target_lon = longitude if longitude is not None else settings.DEFAULT_HYDERABAD_LON
 
-    return await places_service.get_nearby_places(target_lat, target_lon, norm_category)
+    try:
+        return await places_service.get_nearby_places(target_lat, target_lon, norm_category)
+    except Exception as exc:  # pragma: no cover - safety net for upstream outages
+        logger.exception("Unexpected places provider failure for %s, lat=%s lon=%s", norm_category, target_lat, target_lon)
+        is_hyderabad_default = (
+            abs(target_lat - settings.DEFAULT_HYDERABAD_LAT) < 0.05
+            and abs(target_lon - settings.DEFAULT_HYDERABAD_LON) < 0.05
+        )
+        location_label = "Hyderabad (Default)" if is_hyderabad_default else "Current Location"
+        return PlacesResponse(
+            places=[],
+            location=PlaceLocation(
+                latitude=target_lat,
+                longitude=target_lon,
+                label=location_label,
+            ),
+            category=norm_category,
+            category_label=CATEGORY_LABELS.get(norm_category, norm_category.title()),
+            count=0,
+            source="© OpenStreetMap contributors",
+            attribution_url="https://www.openstreetmap.org/copyright",
+            cached=False,
+        )
